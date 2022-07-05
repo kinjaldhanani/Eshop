@@ -1,8 +1,11 @@
 
 from django.db import models
+
+# from cart.models import Cart
 from product.models import Product
 from user_info.models import User
 import datetime
+from django.db.models.signals import pre_save
 
 
 class Order(models.Model):
@@ -26,7 +29,6 @@ class OrderItem(models.Model):
 
     def total_cost(self):
         return self.quantity * self.product.price
-
 
 
 

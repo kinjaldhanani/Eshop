@@ -1,6 +1,11 @@
 from django.db import models
 from category.models import Category
 from user_info.models import User
+from django.db.models import signals
+from django.dispatch import receiver
+
+
+
 
 
 class Product(models.Model):
@@ -16,3 +21,8 @@ class Product(models.Model):
 
     def number_of_likes(self):
         return self.likes.count()
+
+    # @receiver(signals.pre_save, sender=Product)
+    # def check_product_description(sender, instance, **kwargs):
+    #     if not instance.description:
+    #         instance.description = 'This is Default Description'
