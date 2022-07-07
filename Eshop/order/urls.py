@@ -6,7 +6,7 @@ app_name = 'order'
 
 router = routers.SimpleRouter()
 router.register('order', views.OrderView)
-router.register('order_item', views.OrderItemView)
+# router.register('order_item', views.OrderItemView)
 
 urlpatterns = [
 

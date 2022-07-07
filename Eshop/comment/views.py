@@ -1,9 +1,9 @@
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from Eshop.permission import IsOwner
+from Eshop.permissions import IsOwner
 from comment.models import Comment
-from comment.serializer import CommentSerializer
+from comment.serializers import CommentSerializer
 
 
 class CommentView(ModelViewSet):

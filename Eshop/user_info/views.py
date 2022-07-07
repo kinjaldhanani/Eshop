@@ -5,7 +5,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 from user_info.models import User
-from user_info.serializer import ChangePasswordSerializer, SignUpSerializer
+from user_info.serializers import ChangePasswordSerializer, SignUpSerializer
 from knox.views import LoginView as KnoxLoginView
 from rest_framework.permissions import IsAuthenticated
 

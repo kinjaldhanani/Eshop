@@ -3,7 +3,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from product.models import Product
-from product.serializer import ProductSerializer, LikeSerializer, HomeSerializer
+from product.serializers import ProductSerializer, LikeSerializer, HomeSerializer
 
 
 # class PostPageNumberPagination(PageNumberPagination):
