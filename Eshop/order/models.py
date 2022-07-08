@@ -6,7 +6,7 @@ import datetime
 
 
 class Order(models.Model):
-    customer = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     address = models.CharField(max_length=50, blank=True)
     phone = models.CharField(max_length=50,blank=True)
     date = models.DateField(default=datetime.date.today)
