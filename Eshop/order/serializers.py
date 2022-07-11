@@ -1,14 +1,17 @@
-from django.core.paginator import Page
-from rest_framework import serializers, request
-from rest_framework.templatetags.rest_framework import data
 
+
+from rest_framework import serializers
+
+import order
 from order.models import Order, OrderItem
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = OrderItem
-        fields = ["product", "quantity", "total_cost"]
+        fields = ["order","product", "quantity", "total_cost"]
+        extra_kwargs = {'order': {'required': False}}
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -17,34 +20,47 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ["id", "customer", "address", "phone", "OrderItems", "get_total"]
-        read_only_fields = ["date"]
-
-    # def create(self, validated_data):
-    #
-    #     order_items = validated_data.pop('OrderItems')
-    #     parent = Order.objects.create(**validated_data)
-    #     for data in order_items:
-    #         parent.OrderItems.create(**data)
-    #     return parent
+        read_only_fields = ["date", "id"]
 
     def create(self, validated_data):
-
         orders_data = validated_data.pop('OrderItems')
-        parent = Order.objects.create(**validated_data)
+        order = super().create(validated_data)
         for data in orders_data:
-            order_serializer = OrderItemSerializer(data=data, many=True)
+            item = dict()
+            product_id = data.get('product').id
+            item.update({
+                'product': product_id,
+                'quantity': data.get('quantity'),
+                'order': order.id,
+
+            })
+            order_serializer = OrderItemSerializer(data=item)
             order_serializer.is_valid(raise_exception=True)
-            orders = order_serializer.save()
-            orders.parent = parent
-            orders.save()
-        return parent
+            order_serializer.save()
+        return order
 
+    def update(self, instance, validated_data):
+        # instance = super().update(instance, validated_data)
+        OrderItems = validated_data.pop('OrderItems')
+        instance.customer = validated_data.get('customer', instance.customer)
+        instance.address = validated_data.get('address', instance.address)
+        instance.phone = validated_data.get('phone', instance.phone)
+        for data in OrderItems:
+            if item := instance.OrderItems.filter(id=data.get('id')).first():
+                item.product = data.get('product')
+                item.quantity = data.get('quantity')
+                item.save()
+            else:
+                order = super().create(validated_data)
+                product_id = data.get('product').id
+                data.update({
+                    'product': product_id,
+                    'quantity': data.get('quantity'),
+                    'order': order.id,
 
-# def update(self, instance, validated_data):
-#         if validated_data.get('OrderItems'):
-#             order_data = validated_data.get('quantity')
-#             order_serializer = OrderItemSerializer(data=order_data)
-#             if order_serializer.is_valid():
-#                 order = order_serializer.update(instance=instance.profile,validated_data=order_serializer.validated_data)
-#                 validated_data['OrderItems'] = order
-#         return super().update(instance, validated_data)
+                })
+                order_serializer = OrderItemSerializer(data=data)
+                order_serializer.is_valid(raise_exception=True)
+                order_serializer.save()
+                return order
+        return instance
