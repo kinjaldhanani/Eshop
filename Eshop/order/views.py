@@ -17,10 +17,7 @@ class OrderView(ModelViewSet):
             return Order.objects.filter(customer=self.request.user.id)
 
 
-# class OrderItemView(ModelViewSet):
-#     serializer_class = OrderItemSerializer
-#     queryset = OrderItem.objects.all()
-#     permission_classes = [IsAuthenticated]
+
 
 
 

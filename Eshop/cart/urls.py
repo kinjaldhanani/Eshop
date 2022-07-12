@@ -6,7 +6,7 @@ app_name = 'cart'
 
 router = routers.SimpleRouter()
 router.register('cart', views.CartView)
-router.register('item', views.CartItemViewSet)
+# router.register('item', views.CartItemViewSet)
 
 urlpatterns = [
 
