@@ -16,8 +16,5 @@ class CartView(ModelViewSet):
             return Cart.objects.filter(customer=self.request.user.id)
 
 
-# class CartItemViewSet(ModelViewSet):
-#     serializer_class = ItemSerializer
-#     queryset = Item.objects.all()
-#     permission_classes = [IsAuthenticated, IsItem]
+
 

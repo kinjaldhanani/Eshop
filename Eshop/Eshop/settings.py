@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'cart',
     'comment',
     'category',
+    'payment',
     'user_info',
     'rest_framework',
     'knox',
@@ -163,4 +164,7 @@ REST_FRAMEWORK = {
 
 APPEND_SLASH = False
 
+if DEBUG:
+    STRIPE_PUBLISHABLE_KEY = 'pk_test_51LKfHrSEHBoQx2VYhaXf1xUFtu3xUccSdjzZoRKFhUvxnorZquSw7SqjQloQJ3yjxWxgFOINwBTUqpiXZzifDFI600VmW2WJV1'
+    STRIPE_SECRET_KEY = 'sk_test_51LKfHrSEHBoQx2VY7BE7sQEJpRIVpFBLk03k3prYxjJj3B1PVJn5R0yBaU8b53zo59lQLgBhiH79m65aXwSCZ6Ek00CZIFAwwR'
 

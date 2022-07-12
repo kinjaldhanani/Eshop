@@ -23,15 +23,14 @@ class CartSerializer(serializers.ModelSerializer):
         cart_data = validated_data.pop('items')
         cart = super().create(validated_data)
         for data in cart_data:
-            item = dict()
             product_id = data.get('product').id
-            item.update({
+            data.update({
                 'product': product_id,
                 'quantity': data.get('quantity'),
                 'cart': cart.id,
 
             })
-            order_serializer = ItemSerializer(data=item)
+            order_serializer = ItemSerializer(data=data)
             order_serializer.is_valid(raise_exception=True)
             order_serializer.save()
         return cart
@@ -46,15 +45,14 @@ class CartSerializer(serializers.ModelSerializer):
                 item.save()
                 instance.save()
             else:
-                item = dict()
                 product_id = data.get('product').id
-                item.update({
+                data.update({
                     'product': product_id,
                     'quantity': data.get('quantity'),
                     'cart': instance.id,
 
                 })
-                order_serializer = ItemSerializer(data=item)
+                order_serializer = ItemSerializer(data=data)
                 order_serializer.is_valid(raise_exception=True)
                 order_serializer.save()
         return instance

@@ -23,15 +23,14 @@ class OrderSerializer(serializers.ModelSerializer):
         orders_data = validated_data.pop('items')
         order = super().create(validated_data)
         for data in orders_data:
-            item = dict()
             product_id = data.get('product').id
-            item.update({
+            data.update({
                 'product': product_id,
                 'quantity': data.get('quantity'),
                 'order': order.id,
 
             })
-            order_serializer = OrderItemSerializer(data=item)
+            order_serializer = OrderItemSerializer(data=data)
             order_serializer.is_valid(raise_exception=True)
             order_serializer.save()
         return order
@@ -48,15 +47,14 @@ class OrderSerializer(serializers.ModelSerializer):
                 item.save()
                 instance.save()
             else:
-                item = dict()
                 product_id = data.get('product').id
-                item.update({
+                data.update({
                     'product': product_id,
                     'quantity': data.get('quantity'),
                     'order': instance.id,
 
                 })
-                order_serializer = OrderItemSerializer(data=item)
+                order_serializer = OrderItemSerializer(data=data)
                 order_serializer.is_valid(raise_exception=True)
                 order_serializer.save()
         return instance
