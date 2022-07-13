@@ -1,5 +1,5 @@
 import stripe
-from rest_framework import status
+from rest_framework import status, request
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -16,14 +16,20 @@ class PaymentView(ModelViewSet):
     queryset = Payment.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def test_payment(self):
-        test_payment_intent = stripe.PaymentIntent.create(
-            amount=54890,
-            currency='pln',
-            payment_method_types=['card'],
-            receipt_email='kinjal.dhanani@trootech.com')
 
-        return Response(status=status.HTTP_200_OK, data=test_payment_intent)
-
-
-
+    # def payment(request):
+    #     order = Order.objects.get(customer=request.user, ordered=False)
+    #     amount = int(order.get_total() * 100)
+    #
+    #     if request.method == 'POST':
+    #         print(" request is post ")
+    #         order_amount = amount,
+    #         order_currency = "INR",
+    #         order_receipt = 'order_rcptid_11'
+    #         course = client.order.create(dict(amount=order_amount,
+    #                                           currency=order_currency,
+    #                                           receipt=order_receipt,
+    #                                           payment_capture='0'))
+    #         context = {}
+    #         context['order_id'] = course['id']
+    #         return context
