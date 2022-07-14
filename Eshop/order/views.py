@@ -11,7 +11,7 @@ stripe.api_key = 'sk_test_51LKfHrSEHBoQx2VY7BE7sQEJpRIVpFBLk03k3prYxjJj3B1PVJn5R
 
 def test_payment():
     stripe.PaymentIntent.create(
-        amount=2000,
+        amount=60,
         currency="usd",
         payment_method_types=["card"],
     )
@@ -26,7 +26,5 @@ class OrderView(ModelViewSet):
         """Show only authenticate user order"""
         if self.request.user.is_authenticated:
             return Order.objects.filter(customer=self.request.user.id)
-
-    test_payment()
 
 

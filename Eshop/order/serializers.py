@@ -1,5 +1,10 @@
+from locale import currency
+
+import stripe
 from rest_framework import serializers
 from order.models import Order, OrderItem
+
+stripe.api_key = 'sk_test_51LKfHrSEHBoQx2VY7BE7sQEJpRIVpFBLk03k3prYxjJj3B1PVJn5R0yBaU8b53zo59lQLgBhiH79m65aXwSCZ6Ek00CZIFAwwR '
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -22,12 +27,14 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         orders_data = validated_data.pop('items')
         order = super().create(validated_data)
+        # payment = stripe.PaymentIntent.create(amount='',currency='',payment_method_types='')
         for data in orders_data:
             product_id = data.get('product').id
             data.update({
                 'product': product_id,
                 'quantity': data.get('quantity'),
                 'order': order.id,
+                # 'payment':payment.id
 
             })
             order_serializer = OrderItemSerializer(data=data)
