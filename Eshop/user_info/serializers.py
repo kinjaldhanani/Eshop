@@ -35,7 +35,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             gender=validated_data['gender'],
             profile_image=validated_data["profile_image"],
         )
-        task.send_email_task.delay()
+        # task.send_email_task.delay()
         return user
 
 

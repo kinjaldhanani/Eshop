@@ -10,13 +10,18 @@ class Order(models.Model):
     address = models.CharField(max_length=50, blank=True)
     phone = models.CharField(max_length=50,blank=True)
     date = models.DateField(default=datetime.date.today)
+    total_amount = models.IntegerField(default=0)
 
-    @property
     def get_total(self):
         total = 0
-        for item in self.order_items.all():
+        for item in self.items.all():
             total += item.total_cost()
         return total
+
+    # def save(self, *args, **kwargs):
+    #     super(Order, self).save(*args, **kwargs)
+    #     self.total_amount = self.get_total()
+    #
 
 
 class OrderItem(models.Model):
