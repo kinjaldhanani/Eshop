@@ -18,16 +18,16 @@ class Order(models.Model):
             total += item.total_cost()
         return total
 
-    # def save(self, *args, **kwargs):
-    #     super(Order, self).save(*args, **kwargs)
-    #     self.total_amount = self.get_total()
-    #
+    def set_amount(self):
+        self.total_amount = self.get_total()
+        self.save()
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_order', default=1)
     quantity = models.IntegerField()
+
 
     def total_cost(self):
         return self.quantity * self.product.price

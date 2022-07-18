@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser, User, UserManager
 from django.db import models
 from django.dispatch import receiver
 from django.db.models import signals
@@ -13,6 +13,7 @@ class User(AbstractUser):
         (GENDER_FEMALE, "Female"),
         (OTHER, "Other"),
     )
+    objects = UserManager()
     city = models.CharField(max_length=100)
     country = models.CharField(max_length=100)
     Address = models.CharField(max_length=200)

@@ -15,7 +15,7 @@ def delete_related_cart(sender, instance, **kwargs):
 # @receiver(post_save, sender=Order)
 # def delete_related_cart(sender, instance, **kwargs):
 #     payment = PaymentIntent.create(
-#         amount="10",
+#         amount=instance.set_amount(),
 #         currency="usd",
 #         payment_method_types=["card"],
 #     )

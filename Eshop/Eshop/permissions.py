@@ -15,9 +15,4 @@ class IsItem(permissions.BasePermission):
         return False
 
 
-class IsOrder(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if obj.order.customer == request.user:
-            return True
-        return False
 
