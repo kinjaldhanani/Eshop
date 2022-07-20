@@ -1,3 +1,4 @@
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from Eshop.permissions import IsOwner, IsItem
@@ -14,6 +15,16 @@ class CartView(ModelViewSet):
         """Show only authenticate user cart"""
         if self.request.user.is_authenticated:
             return Cart.objects.filter(customer=self.request.user.id)
+
+
+class CartItemView(ModelViewSet):
+    serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+    permission_classes = [IsItem,IsAuthenticated]
+
+
+
+
 
 
 

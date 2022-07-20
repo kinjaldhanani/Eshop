@@ -1,5 +1,7 @@
 import stripe
 from rest_framework import serializers
+from stripe.api_resources.payment_intent import PaymentIntent
+
 from order.models import Order, OrderItem
 
 stripe.api_key = 'sk_test_51LKfHrSEHBoQx2VY7BE7sQEJpRIVpFBLk03k3prYxjJj3B1PVJn5R0yBaU8b53zo59lQLgBhiH79m65aXwSCZ6Ek00CZIFAwwR '
@@ -38,6 +40,12 @@ class OrderSerializer(serializers.ModelSerializer):
             order_serializer.is_valid(raise_exception=True)
             order_serializer.save()
         order.set_amount()
+        payment = PaymentIntent.create(
+            amount=order.total_amount,
+            currency="usd",
+            payment_method_types=["card"],
+        )
+        import pdb; pdb.set_trace()
+        payment.save()
         return order
-
 

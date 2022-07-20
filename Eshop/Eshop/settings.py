@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'cart',
     'comment',
     'category',
-    'payment',
     'user_info',
     'rest_framework',
     'knox',
