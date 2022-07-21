@@ -1,6 +1,11 @@
+import email
+
 import stripe
 from rest_framework import serializers
+from stripe.api_resources import source, customer
+from stripe.api_resources.customer import Customer
 from stripe.api_resources.payment_intent import PaymentIntent
+from stripe.api_resources.setup_intent import SetupIntent
 
 from order.models import Order, OrderItem
 
@@ -21,7 +26,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ["id","customer","address", "phone", "items", "total_amount"]
+        fields = ["id", "customer", "address", "phone", "items", "total_amount"]
         read_only_fields = ["date", "id"]
 
     def create(self, validated_data):
@@ -40,12 +45,17 @@ class OrderSerializer(serializers.ModelSerializer):
             order_serializer.is_valid(raise_exception=True)
             order_serializer.save()
         order.set_amount()
+
+        """Stripe payment"""
+        customer = stripe.Customer.create()
+        customer_id = customer.get('id')
+
         payment = PaymentIntent.create(
             amount=order.total_amount,
             currency="usd",
-            payment_method_types=["card"],
+            payment_method_types=['card'],
+            customer=customer_id,
+
         )
-        import pdb; pdb.set_trace()
         payment.save()
         return order
-

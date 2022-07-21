@@ -1,4 +1,4 @@
-
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from Eshop.permissions import IsOwner, IsItem
@@ -20,12 +20,6 @@ class CartView(ModelViewSet):
 class CartItemView(ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
-    permission_classes = [IsItem,IsAuthenticated]
-
-
-
-
-
-
+    permission_classes = [IsItem, IsAuthenticated]
 
 
