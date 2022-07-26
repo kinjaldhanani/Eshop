@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser, User, UserManager
 from django.db import models
-from django.dispatch import receiver
-from django.db.models import signals
+
 
 class User(AbstractUser):
     GENDER_MALE = "m"

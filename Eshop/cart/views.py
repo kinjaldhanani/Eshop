@@ -20,6 +20,6 @@ class CartView(ModelViewSet):
 class CartItemView(ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
-    permission_classes = [IsItem, IsAuthenticated]
+    # permission_classes = [IsItem, IsAuthenticated]
 
 

@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -37,16 +39,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'product',
-    'order',
-    'cart',
-    'comment',
-    'category',
-    'user_info',
+    'product.apps.ProductConfig',
+    'order.apps.OrderConfig',
+    'cart.apps.CartConfig',
+    'comment.apps.CommentConfig',
+    'category.apps.CategoryConfig',
+    'user_info.apps.UserInfoConfig',
     'rest_framework',
     'knox',
     'rest_framework.authtoken',
-    'django_extensions',
+    'django_extensions.apps.DjangoExtensionsConfig',
+
 
 ]
 
@@ -86,6 +89,8 @@ WSGI_APPLICATION = 'Eshop.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+
 
 DATABASES = {
     'default': {
@@ -154,11 +159,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+
         'rest_framework.authentication.BasicAuthentication',
         'knox.auth.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 100,
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 
@@ -167,4 +174,5 @@ APPEND_SLASH = False
 if DEBUG:
     STRIPE_PUBLISHABLE_KEY = 'pk_test_51LKfHrSEHBoQx2VYhaXf1xUFtu3xUccSdjzZoRKFhUvxnorZquSw7SqjQloQJ3yjxWxgFOINwBTUqpiXZzifDFI600VmW2WJV1'
     STRIPE_SECRET_KEY = 'sk_test_51LKfHrSEHBoQx2VY7BE7sQEJpRIVpFBLk03k3prYxjJj3B1PVJn5R0yBaU8b53zo59lQLgBhiH79m65aXwSCZ6Ek00CZIFAwwR'
+
 

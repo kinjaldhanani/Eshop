@@ -14,7 +14,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     description = models.CharField(max_length=100)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
-    likes = models.ManyToManyField(User, default=None, related_name='blogpost_like')
+    likes = models.ManyToManyField(User, default=None, related_name='blogpost_like', null=True, blank=True)
 
     def __str__(self):
         return self.name
