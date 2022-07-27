@@ -1,4 +1,4 @@
-import uuid
+import json
 
 import pytest
 from django.urls import reverse
@@ -29,37 +29,59 @@ def test_user(db) -> User:
     return USER_DATA
 
 
+def test_register_with_valid_data(db, test_user):
+    url = reverse("user_info:user-list")
+    user_data = client.post(url, test_user, format='json')
+    assert user_data.status_code == status.HTTP_201_CREATED
+
+
 @pytest.fixture
-def test_login(db) -> User:
-    LOGIN_DATA = {
-        "username": "jinal",
-        "password": "jinal@123#"
+def test_user_invalid(db) -> User:
+    USER_DATA = {
+        "username": "jinal12",
+        "first_name": "jinal12",
+        "last_name": "patel",
+        "email": "jinal.patel@trootech.com",
+        "password": "jinal@123#",
+        "Address": "abc",
+        "city": "Surat",
+        "country": "india",
+        "phone_number": "7894561230",
+        "gender": "f",
+        "birthdate": "14/05/1994",
+        "profile_image": "",
+
     }
-    return LOGIN_DATA
+    return USER_DATA
 
 
-def test_function(db, test_user,test_login):
+def test_register_with_invalid_exists(db, test_user, test_user_invalid):
 
     url = reverse("user_info:user-list")
     user_data = client.post(url, test_user, format='json')
-
-    url1 = reverse("user_info:login")
-    login_user_data = client.post(url1, test_login, format='json')
-
-    assert user_data.status_code == status.HTTP_201_CREATED
-    assert login_user_data.status_code == status.HTTP_200_OK
+    data = json.loads(user_data.content)
+    test_user_create = client.post(url, test_user_invalid, format='json')
+    assert test_user_create.status_code == status.HTTP_400_BAD_REQUEST
 
 
-@pytest.fixture
-def test_password():
-    return 'strong-test-pass'
 
+class Test:
 
-@pytest.fixture
-def create_user(db, django_user_model, test_password):
-    def make_user(**kwargs):
-        kwargs['password'] = test_password
-        if 'username' not in kwargs:
-            kwargs['username'] = str(uuid.uuid4())
-        return django_user_model.objects.create_user(**kwargs)
-    return make_user
+    def setup(self):
+        user = User.objects.create_user(username="admin1234566",
+                                        email="admin1234@trootech.com",
+                                        password="admin@123#")
+
+        return user
+
+    @pytest.mark.django_db
+    def test_login_with_valid_data(self, db):
+        url1 = reverse("user_info:login")
+        data = {
+            'username': "admin1234566",
+            'email': "admin1234@trootech.com",
+            'password': "admin@123#"
+
+        }
+        login_user = client.post(url1, data=data, format='json', )
+        assert login_user.status_code == status.HTTP_200_OK

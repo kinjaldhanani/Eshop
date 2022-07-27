@@ -38,6 +38,12 @@ class SignUpSerializer(serializers.ModelSerializer):
         # task.send_email_task.delay()
         return user
 
+    def validate_email(self, value):
+        email_list = User.objects.values_list("email", flat=True)
+        if value in email_list:
+            raise serializers.ValidationError("email already exists")
+        return value
+
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
     old_password = serializers.CharField(required=True)

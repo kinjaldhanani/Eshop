@@ -6,5 +6,3 @@ class Category(models.Model):
     description = models.CharField(max_length=100, default='1')
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="subcategory")
 
-    def __str__(self):
-        return self.name
