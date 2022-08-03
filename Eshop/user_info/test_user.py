@@ -6,27 +6,19 @@ from rest_framework import status
 from user_info.models import User
 from django.test import Client
 
-client = Client()
+from rest_framework.test import APIClient
+
+client = APIClient()
 
 
-@pytest.fixture
-def test_user(db) -> User:
-    USER_DATA = {
-        "username": "jinal",
-        "first_name": "jinal",
-        "last_name": "patel",
-        "email": "jinal.patel@trootech.com",
-        "password": "jinal@123#",
-        "Address": "abc",
-        "city": "Surat",
-        "country": "india",
-        "phone_number": "7894561230",
-        "gender": "f",
-        "birthdate": "14/05/1994",
-        "profile_image": "",
-
+def test_admin(db, test_admin_user):
+    url1 = "http://127.0.0.1:8000/api/v1/login/"
+    user_data = {
+        "username": "admin",
+        "password": "admin@123###"
     }
-    return USER_DATA
+    responce = client.post(url1, user_data, format='json')
+    assert responce.status_code == status.HTTP_200_OK
 
 
 def test_register_with_valid_data(db, test_user):
@@ -35,34 +27,12 @@ def test_register_with_valid_data(db, test_user):
     assert user_data.status_code == status.HTTP_201_CREATED
 
 
-@pytest.fixture
-def test_user_invalid(db) -> User:
-    USER_DATA = {
-        "username": "jinal12",
-        "first_name": "jinal12",
-        "last_name": "patel",
-        "email": "jinal.patel@trootech.com",
-        "password": "jinal@123#",
-        "Address": "abc",
-        "city": "Surat",
-        "country": "india",
-        "phone_number": "7894561230",
-        "gender": "f",
-        "birthdate": "14/05/1994",
-        "profile_image": "",
-
-    }
-    return USER_DATA
-
-
 def test_register_with_invalid_exists(db, test_user, test_user_invalid):
-
     url = reverse("user_info:user-list")
     user_data = client.post(url, test_user, format='json')
     data = json.loads(user_data.content)
     test_user_create = client.post(url, test_user_invalid, format='json')
     assert test_user_create.status_code == status.HTTP_400_BAD_REQUEST
-
 
 
 class Test:
@@ -85,3 +55,16 @@ class Test:
         }
         login_user = client.post(url1, data=data, format='json', )
         assert login_user.status_code == status.HTTP_200_OK
+
+
+def test_change_password(db, test_admin_user):
+    client.force_authenticate(test_admin_user)
+
+    url1 = "http://127.0.0.1:8000/api/v1/change-password/"
+    data = {
+        'old_password': test_admin_user.password,
+        'new_password': "admin",
+
+    }
+    test_password = client.patch(url1, data=data, format='json')
+    assert test_password.status_code == status.HTTP_200_OK

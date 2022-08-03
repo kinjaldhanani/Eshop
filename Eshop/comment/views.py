@@ -1,14 +1,14 @@
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from Eshop.permissions import IsOwner
 from comment.models import Comment
 from comment.serializers import CommentSerializer
 
 
 class CommentView(ModelViewSet):
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
+    http_method_names = ['get', 'post']
     queryset = Comment.objects.all()
 
     def get_queryset(self):

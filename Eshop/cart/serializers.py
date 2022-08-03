@@ -1,24 +1,15 @@
-
 from rest_framework import serializers
 from cart.models import Cart, Item
-
-
-class CartSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cart
-        fields = ['id', 'customer', 'total']
-        read_only_fields = ['date', 'status']
 
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'cart', 'quantity', 'product','get_total']
-        extra_kwargs = {'cart': {'required': False}}
+        fields = ['id', 'cart', 'quantity', 'product', 'get_total']
 
     def create(self, validated_data):
         user = self.context['request'].user
-        obj, created = Cart.objects.update_or_create(customer=user)
+        obj, created = Cart.objects.get_or_create(customer=user)
         if created:
             obj.save()
         validated_data.update({
@@ -27,4 +18,3 @@ class ItemSerializer(serializers.ModelSerializer):
             'cart': obj,
         })
         return super().create(validated_data)
-

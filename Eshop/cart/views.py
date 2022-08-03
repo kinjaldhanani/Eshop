@@ -1,25 +1,22 @@
-from rest_framework.generics import get_object_or_404
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from Eshop.permissions import IsOwner, IsItem
-from cart.models import Cart, Item
-from cart.serializers import CartSerializer, ItemSerializer
 
-
-class CartView(ModelViewSet):
-    serializer_class = CartSerializer
-    queryset = Cart.objects.all()
-    permission_classes = [IsOwner, IsAuthenticated]
-
-    def get_queryset(self):
-        """Show only authenticate user cart"""
-        if self.request.user.is_authenticated:
-            return Cart.objects.filter(customer=self.request.user.id)
+import cart
+from Eshop.permissions import IsItem
+from cart.models import Item
+from cart.serializers import  ItemSerializer
 
 
 class CartItemView(ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.all()
-    # permission_classes = [IsItem, IsAuthenticated]
+    permission_classes = [IsItem,IsAuthenticated]
+    #
+    # def get_queryset(self):
+    #     """Show only authenticate user item"""
+    #     if self.request.user.is_authenticated:
+    #         import pdb; pdb.set_trace()
+    #         return Item.objects.all()
 
 

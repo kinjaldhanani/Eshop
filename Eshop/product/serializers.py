@@ -1,17 +1,11 @@
-from abc import ABC
-
 from rest_framework import serializers
-
-import product
-from product import models
 from product.models import Product
 
 
 class ProductListSerializer(serializers.ListSerializer):
-
     def create(self, validated_data):
-        products = [models.Product(**category) for category in validated_data]
-        return models.Product.objects.bulk_create(products)
+        products = [Product(**category) for category in validated_data]
+        return Product.objects.bulk_create(products)
 
     def update(self, instance, validated_data):
         ret = []
@@ -24,9 +18,6 @@ class ProductListSerializer(serializers.ListSerializer):
         return ret
 
 
-
-
-
 class ProductSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
 
@@ -36,14 +27,3 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'category', 'description', 'price', 'image']
 
 
-
-class HomeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ['id', 'name', 'description', 'image']
-
-
-class LikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ['id', 'likes']

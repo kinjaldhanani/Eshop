@@ -1,9 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-
-from Eshop.permissions import IsOrder
-from order.models import Order, OrderItem
-from order.serializers import OrderSerializer, OrderItemSerializer
+from order.models import Order
+from order.serializers import OrderSerializer
 import stripe
 
 stripe.api_key = 'sk_test_51LKfHrSEHBoQx2VY7BE7sQEJpRIVpFBLk03k3prYxjJj3B1PVJn5R0yBaU8b53zo59lQLgBhiH79m65aXwSCZ6Ek00CZIFAwwR '
@@ -12,11 +10,11 @@ stripe.api_key = 'sk_test_51LKfHrSEHBoQx2VY7BE7sQEJpRIVpFBLk03k3prYxjJj3B1PVJn5R
 class OrderView(ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
-    permission_classes = [IsOrder, IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'post', 'delete']
 
-    # def get_queryset(self):
-    #     """Show only authenticate user order"""
-    #     if self.request.user.is_authenticated:
-    #         return Order.objects.filter(customer=self.request.user.id)
+    def get_queryset(self):
+        """Show only authenticate user order"""
+        if self.request.user.is_authenticated:
+            return Order.objects.filter(customer=self.request.user.id)
 

@@ -10,7 +10,6 @@ class Cart(models.Model):
     date = models.DateField(default=datetime.date.today)
     status = models.BooleanField(default=True, null=True, blank=True)
 
-    @property
     def total(self):
         total = 0
         for item in self.items.all():
@@ -36,5 +35,3 @@ class Item(models.Model):
 
     def get_total(self):
         return self.quantity * self.product.price
-
-

@@ -7,7 +7,7 @@ app_name = 'product'
 router = routers.SimpleRouter()
 router.register('home',views.HomeView)
 router.register('product',views.ProductView)
-router.register('like',views.LikeView)
+
 urlpatterns = [
 
     # path('signup/', SignUpView.as_view(), name='signup'),

@@ -33,7 +33,7 @@ class SignUpSerializer(serializers.ModelSerializer):
             country=validated_data["country"],
             phone_number=validated_data["phone_number"],
             gender=validated_data['gender'],
-            profile_image=validated_data["profile_image"],
+
         )
         # task.send_email_task.delay()
         return user
